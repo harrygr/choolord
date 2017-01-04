@@ -1,11 +1,13 @@
 const transport = require('../transport')
 const jwtDecode = require('jwt-decode')
 
+const { blankUser } = require('../factories/user')
+
 module.exports = {
   namespace: 'user',
 
   state: {
-    user: null
+    user: blankUser()
   },
 
   reducers: {

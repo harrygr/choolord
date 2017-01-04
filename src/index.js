@@ -13,7 +13,8 @@ const middleware = require('./middleware')
 const layout = require('./views/layout')
 app.router([
   ['/', layout(require('./views/home'))],
-  ['/login', middleware.redirectIfAuthenticated(layout(require('./views/login')))]
+  ['/login', middleware.redirectIfAuthenticated(layout(require('./views/login')))],
+  ['/profile', middleware.redirectIfUnauthenticated(layout(require('./views/profile')))]
   ])
 
 
