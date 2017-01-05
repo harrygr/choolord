@@ -2,13 +2,17 @@ const html = require('choo/html')
 const gravatar = require('./gravatar')
 
 module.exports = (user) => {
-  return html`<div class="mdc-card demo-card">
-    <section class="mdc-card__media demo-card__16-9-media">
-      ${gravatar(user.email)}
+  return html`
+  <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width:100%">
+    <section class="mdl-card__title" style="background: url(${gravatar(user.email)}); background-size: 100% auto; background-repeat: no-repeat; height: 276px;">
+      <h2 class="mdl-card__title-text">${user.name}</h2>
     </section>
-    <section class="mdc-card__primary">
-      <h1 class="mdc-card__title mdc-card__title--large">${user.name}</h1>
-      <h2 class="mdc-card__subtitle">${user.email}</h2>
+    <section class="mdl-card__supporting-text">
+      <p class="">
+        ${user.email}<br>
+        ${user.phone}
+      </p>
     </section>
-  </div>`
+  </div>
+  `
 }

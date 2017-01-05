@@ -2,10 +2,6 @@ const md5 = require('blueimp-md5')
 const html = require('choo/html')
 
 module.exports = email => {
-  return html`<img src="${getAvatar(email)}" alt="Avatar from ${email}" style="width:100%; height: 100%"/>`
-}
-
-const getAvatar = email => {
   const hash = generateHash(email)
   const defaultAvatar = encodeURIComponent(getDefaultAvatar(hash))
   const size = 900

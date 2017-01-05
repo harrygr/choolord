@@ -11,10 +11,10 @@ module.exports = (state, prev, send) => {
   const name = state.user.user ? state.user.user.name : ''
 
   return html`
-  <div>
-    ${isLoggedIn ? '' : html`<a class="nav-item" href="/login">Login</a>`}
-    ${isLoggedIn ? html`<span class="nav-item">Hey ${name}! <a href="" onclick=${logout}>Logout</a></span>` : ''}
-  </div>
+  <span>
+    ${isLoggedIn ? '' : html`<a class="mdl-navigation__link" href="/login">Login</a>`}
+    ${isLoggedIn ? html`<a class="mdl-navigation__link" href="" onclick=${logout}>Logout</a>` : ''}
+  </span>
   `
 }
 

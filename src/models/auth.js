@@ -1,5 +1,6 @@
-module.exports = storage => {
-
+module.exports = ({
+  storage = null
+} = {}) => {
   const fetchTokens = () => {
     const tokens = storage.getItem('tokens')
     const defaults = {

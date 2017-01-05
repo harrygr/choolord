@@ -3,7 +3,7 @@ const jwtDecode = require('jwt-decode')
 
 const { blankUser } = require('../factories/user')
 
-module.exports = {
+module.exports = () => ({
   namespace: 'user',
 
   state: {
@@ -25,7 +25,7 @@ module.exports = {
       }).catch(done)
     }
   }
-}
+})
 
 function getUserIdFromToken(token) {
   return jwtDecode(token).sub

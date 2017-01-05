@@ -1,4 +1,3 @@
-require('material-design-lite')
 const choo = require('choo')
 const log = require('choo-log')
 

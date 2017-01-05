@@ -10,7 +10,7 @@ const constraints = () => ({
 const initErrors = () => ({email: [], password: []})
 const initForm = () => ({email: '', password: ''})
 
-module.exports = {
+module.exports = () => ({
   namespace: 'login',
 
   state: {
@@ -58,10 +58,13 @@ module.exports = {
 
           send('login:reset', null, done)
           send('location:set', '/', done)
-        }).catch(done)
+        }).catch(err => {
+          send('alert:growl', 'Login Failed!', done)
+          done(err)
+        })
       }
 
       send('login:validate', null, cb)
     }
   }
-}
+})

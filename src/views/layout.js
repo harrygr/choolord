@@ -1,5 +1,8 @@
 const html = require('choo/html')
-const authBar = require('../components/auth')
+const header = require('./header')
+const pageSection = require('./page-section')
+const footer = require('./footer')
+const snackbar = require('../components/snackbar')
 
 module.exports = child => (state, prev, send) => {
   const onload = () => {
@@ -9,18 +12,18 @@ module.exports = child => (state, prev, send) => {
   }
 
   return html`
-  <div id="app" onload=${onload}>
-    <div class="navbar mdc-theme--primary-bg mdc-theme--text-primary-on-primary mdc-typography--title mdc-elevation--z4">
-      <span class="demo-menu material-icons">menu</span>
-      <a class="nav-item" href="/">Home</a>
-      <a class="nav-item" href="/profile">Profile</a>
-      <div class="nav-right">
-        ${authBar(state, prev, send)}
-      </div>
+  <div id="app" class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" onload=${onload}>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      ${header(state, prev, send)}
+      <main class="mdl-layout__content">
+        <div class="page-container">
+          ${pageSection(child(state, prev, send))}
+        </div>
+        ${footer()}
+      </main>
     </div>
-    <div class="container">
-      ${child(state, prev, send)}
-    </div>
+
+    ${snackbar(state.alert.message)}
   </div>
   `
 }
