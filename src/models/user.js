@@ -17,10 +17,16 @@ module.exports = () => ({
   },
 
   effects: {
-    fetch (state, tokens, send, done) {
-      const userId = getUserIdFromToken(tokens.accessToken)
+    fetchIfRequired (state, _, send, done) {
+      if (state.auth.accessToken && !state.user.user.id) {
+        send('user:fetch', null, done)
+      }
+    },
 
-      transport(tokens).get(`/passport/${userId}`).then(({data}) => {
+    fetch (state, _, send, done) {
+      const userId = getUserIdFromToken(state.auth.accessToken)
+
+      transport(state.auth).get(`/passport/${userId}`).then(({data}) => {
         send('user:set', data, done)
       }).catch(done)
     }

@@ -37,16 +37,16 @@ module.exports = () => ({
   },
 
   effects: {
-    getToken ({form}, data, send, done) {
-      const cb = (_, state) => {
+    getToken (state, _, send, done) {
+      const cb = () => {
         if (!state.login.valid) {
           return
         }
 
         const payload = qs.stringify({
           grant_type: 'password',
-          username: form.email,
-          password: form.password
+          username: state.login.form.email,
+          password: state.login.form.password
         })
 
         http.post('http://localhost:8000/api/oauth/token', payload).then(response => {
@@ -57,6 +57,7 @@ module.exports = () => ({
           }, done)
 
           send('login:reset', null, done)
+          send('alert:growl', 'Welcome back!', done)
           send('location:set', '/', done)
         }).catch(err => {
           send('alert:growl', 'Login Failed!', done)

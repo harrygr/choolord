@@ -7,10 +7,7 @@ module.exports = (state, prev, send, {
 } = {}) => {
   const getAddress = () => {
     send('address:setResults', [])
-    send('address:lookup', {
-      postcode: state.address.postcode,
-      tokens: state.auth
-    })
+    send('address:lookup')
   }
 
   const selectResult = (address) => {

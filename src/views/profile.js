@@ -10,11 +10,11 @@ module.exports = (state, _prev, send) => {
   return html`
   <article>
     <div class="columns">
-      <div class="column is-half">
+      <div class="column is-one-third">
         ${profileCard(state.user.user)}
       </div>
 
-      <div class="column">
+      <div class="column is-two-thirds">
         <h4>Enter Your Address</h4>
 
         ${addressLookup(state, _prev, send, {onselected})}

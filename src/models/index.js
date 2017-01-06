@@ -1,7 +1,14 @@
-module.exports = [
-  require('./login')(),
-  require('./auth')({storage: window.localStorage}),
-  require('./user')(),
-  require('./alert')(),
-  require('./address')()
+const pages = [
+require('./login')(),
+require('./auth')({storage: window.localStorage}),
+require('./user')(),
 ]
+
+const components = [
+  require('./alert')(),
+  require('./address')(),
+  require('../components/counter').model(),
+  require('../components/dropdown').model(),
+]
+
+module.exports = [...pages, ...components]

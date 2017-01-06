@@ -11,6 +11,7 @@ return html`
 
       <nav class="mdl-navigation">
         <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/widgets">Widgets</a>
         <a class="mdl-navigation__link" href="/profile">Profile</a>
         ${authBar(state, prev, send)}
       </nav>

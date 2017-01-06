@@ -24,9 +24,8 @@ module.exports = () => ({
   },
 
   effects: {
-    lookup (state, {tokens, postcode}, send, done) {
-      transport(tokens).get(`/postcodes?postcode=${postcode}`).then(({data}) => {
-        console.log(data)
+    lookup (state, _, send, done) {
+      transport(state.auth).get(`/postcodes?postcode=${state.address.postcode}`).then(({data}) => {
         send('address:setResults', data, done)
       }).catch(err => {
         send('alert:growl', 'Address Lookup Failed', done)
