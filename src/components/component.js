@@ -11,17 +11,22 @@ const getDefaultReducers = (defaultState) => ({
     })
   },
 
-  clear: remove
+  setProp(state, { id, key, value }) {
+    return update(state.instances, id, {
+      ...state.instances[id],
+      [key]: value
+    })
+  },
+
+  clear (state, id) {
+    return {instances: Object.keys(state).filter(key => key !== id).reduce((curr, prev) => {
+      return {...prev, ...state[curr]}
+    }, {})}
+  }
 })
 
 const update = (instances, id, value) => {
   return {instances: {...instances, [id]: value }}
-}
-
-const remove = (instances, id) => {
-  return {instances: Object.keys(instances).filter(key => key !== id).reduce((curr, prev) => {
-    return {...prev, ...instances[curr]}
-  }, {})}
 }
 
 const build = (definition) => {
@@ -40,8 +45,9 @@ const build = (definition) => {
         ...getDefaultReducers(component.defaultState)
       }
     }),
-    component: (globalState, prev, send) => (id, { initialState = {}, props = {} }) => {
+    component: (globalState, prev, send) => (id, { initialState = {}, props = {} } = {}) => {
       const currentInstanceState = globalState[model.namespace].instances[id] ? globalState[model.namespace].instances[id] : component.defaultState()
+
       return component.view({
         ...getDefaultListeners(model.namespace, send, { id, initialState }),
         ...currentInstanceState,
@@ -52,4 +58,4 @@ const build = (definition) => {
   }
 }
 
-module.exports = { build, update, remove, getDefaultListeners, getDefaultReducers}
+module.exports = { build, update }

@@ -1,85 +1,72 @@
 const html = require('choo/html')
 const button = require('./button')
-const {update, getDefaultReducers} = require('./component')
+const component = require('./component')
 
-const element = ({
-  count = 0,
-  hovered = false,
-  setup = () => {},
-  teardown = () => {},
-  onincr = () => {},
-  onmouseenter = () => { console.log('the mouse entered!') },
-  onmouseout = () => { console.log('the mouse left!') },
-}) => {
-  return html`
-  <div onunload=${teardown} onload=${setup}>
-    ${button({
-      onclick: onincr,
-      label: 'Increment'
-    })}
-    <span onmouseenter=${onmouseenter} onmouseout=${onmouseout}>${count}</span>
 
-    ${hovered ? html`<span>This is toggled</span>` : ''}
-  </div>
-  `
-}
+const counterDefinition = () => {
+  return {
+    model () {
+      return {
+        namespace: 'counter',
+        state: {
+          instances: {}
+        },
+        reducers: {
+          increment (state, id) {
+            const prev = state.instances[id].count
 
-const component = (state, prev, send) => (id, {initialState = {}} = {}) => {
-  const currentCounter = state.counter.instances[id] ? state.counter.instances[id] : emptyCounter()
-
-  return element({
-    ...currentCounter,
-    setup () {
-      send('counter:init', { id, initialState })
+            return component.update(state.instances, id, {
+              ...state.instances[id],
+              count: prev + 1
+            })
+          }
+        }
+      }
     },
-    teardown () {
-      send('counter:clear', id)
-    },
-    onincr () {
-      send('counter:increment', id)
-    },
-    onmouseenter () {
-      send('counter:setProp', {id, key: 'hovered', value: true})
-    },
-    onmouseout () {
-      send('counter:setProp', {id, key: 'hovered', value: false})
-    }
-  })
-}
 
-const emptyCounter = () => ({
-  count: 0,
-  hovered: false
-})
+    view ({
+      count = 0,
+      hovered = false,
+      setup = () => {},
+      teardown = () => {},
+      onincr = () => {},
+      onmouseenter = () => { console.log('the mouse entered!') },
+      onmouseout = () => { console.log('the mouse left!') },
+    } = {}) {
+      return html`
+      <div onunload=${teardown} onload=${setup}>
+        ${button({
+          onclick: onincr,
+          label: 'Increment'
+        })}
+        <span onmouseenter=${onmouseenter} onmouseout=${onmouseout}>${count}</span>
 
-const model = () => ({
-  namespace: 'counter',
-  state: {
-    instances: {}
-  },
-  reducers: {
-    ...getDefaultReducers(emptyCounter),
-    set (state, { id, count }) {
-      return update(state.instances, id, {
-        ...state.instances[id],
-        count
-      })
+        ${hovered ? html`<span>This is toggled</span>` : ''}
+      </div>
+      `
     },
-    increment (state, id) {
-      const prev = state.instances[id].count
 
-      return update(state.instances, id, {
-        ...state.instances[id],
-        count: prev + 1
-      })
+    behaviour (send, id) {
+      return {
+        onincr () {
+          send('counter:increment', id)
+        },
+        onmouseenter () {
+          send('counter:setProp', {id, key: 'hovered', value: true})
+        },
+        onmouseout () {
+          send('counter:setProp', {id, key: 'hovered', value: false})
+        }
+      }
     },
-    setProp(state, { id, key, value }) {
-      return update(state.instances, id, {
-        ...state.instances[id],
-        [key]: value
-      })
+
+    defaultState () {
+      return {
+        count: 0,
+        hovered: false
+      }
     }
   }
-})
+}
 
-module.exports  = { element, component, model }
+module.exports = component.build(counterDefinition)
