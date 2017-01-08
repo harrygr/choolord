@@ -1,5 +1,6 @@
-const transport = require('../transport')
+// const transport = require('../transport')
 const jwtDecode = require('jwt-decode')
+const http = require('../client')
 
 const { blankUser } = require('../factories/user')
 
@@ -26,7 +27,9 @@ module.exports = () => ({
     fetch (state, _, send, done) {
       const userId = getUserIdFromToken(state.auth.accessToken)
 
-      transport(state.auth).get(`/passport/${userId}`).then(({data}) => {
+      console.log('Fetching user with ID ' + userId)
+
+      http.get(`/user/${userId}`).then(({data}) => {
         send('user:set', data, done)
       }).catch(done)
     }

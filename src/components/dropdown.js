@@ -1,37 +1,9 @@
 const html = require('choo/html')
-const {updateInstanceWithId, removeInstanceWithId, getDefaultListeners, getDefaultReducers} = require('./helpers')
+const component = require('./component')
 
 const closeIfClickedOutside = (elm, close) => e => {
   if (!elm.contains(e.target)) {
-    console.log('should close')
     close()
-  }
-}
-
-const createComponent = (definition) => {
-  const component = definition()
-  const model = component.model()
-  return {
-    model: () => ({
-      namespace: model.namespace,
-      state: {
-        ...model.state,
-        instances: {}
-      },
-      reducers: {
-        ...model.reducers,
-        ...getDefaultReducers(component.defaultState)
-      }
-    }),
-    component: (globalState, prev, send) => (id, { initialState = {}, props = {} }) => {
-      const currentInstanceState = globalState[model.namespace].instances[id] ? globalState[model.namespace].instances[id] : component.defaultState()
-      return component.view({
-        ...getDefaultListeners(model.namespace, send, { id, initialState }),
-        ...currentInstanceState,
-        ...props,
-        ...component.behaviour(send, id)
-      })
-    }
   }
 }
 
@@ -43,11 +15,11 @@ const dropdownDefinition = () => {
         state: {},
         reducers: {
           close (state, id) {
-            return updateInstanceWithId(state.instances, id, {...state.instances[id], visible: false})
+            return component.update(state.instances, id, {...state.instances[id], visible: false})
           },
           toggleVisible (state, id) {
             console.log('reducer toggleVisible')
-            return updateInstanceWithId(state.instances, id, {...state.instances[id], visible: !state.instances[id].visible})
+            return component.update(state.instances, id, {...state.instances[id], visible: !state.instances[id].visible})
           }
         }
       }
@@ -56,12 +28,9 @@ const dropdownDefinition = () => {
     behaviour: (send, id) => {
       return {
         close: () => {
-
-          console.log('proper close method')
           send('dropdown:close', id)
         },
         toggle: () => {
-          console.log('proper toggle visible method')
           send('dropdown:toggleVisible', id)
         }
       }
@@ -72,8 +41,8 @@ const dropdownDefinition = () => {
       items = [],
       setup = () => {},
       teardown = () => {},
-      toggle = () => { console.log('default toggle method') },
-      close = () => { console.log('default close method') }
+      toggle = () => {},
+      close = () => {}
     } = {}) => {
       const onload = elm => {
         elm.getRootNode().addEventListener('click', closeIfClickedOutside(elm, close))
@@ -94,8 +63,6 @@ const dropdownDefinition = () => {
             <i class="material-icons">more_vert</i>
           </button>
 
-          <span onclick=${close}>Close me</span>
-
           <div class="mdl-menu__container ${visible ? 'is-visible' : ''}" style="">
             <ul class="dropdown-menu mdl-card mdl-shadow--2dp" for="demo-menu-lower-left">
               ${items.map(item => html`${item}`)}
@@ -114,7 +81,4 @@ const dropdownDefinition = () => {
   }
 }
 
-const dropdown = createComponent(dropdownDefinition)
-
-console.log(dropdown)
-module.exports = { model: dropdown.model, component: dropdown.component }
+module.exports = component.build(dropdownDefinition)

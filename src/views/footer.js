@@ -1,6 +1,7 @@
 const html = require('choo/html')
 
 module.exports = (state, prev, send) => {
+  return html`<div style="height: 400px"></div>`
   return html`
     <footer class="mdl-mega-footer">
       <div class="mdl-mega-footer--middle-section">

@@ -4,7 +4,7 @@ const extractData = response => response.data
 
 module.exports = ({accessToken}) => {
   return http.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: 'http://localhost:4000/api',
     headers: {
       'Authorization': `Bearer ${accessToken}`
     },

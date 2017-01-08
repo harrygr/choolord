@@ -1,5 +1,5 @@
-const http = require('axios')
-const qs = require('qs')
+const http = require('../client')
+// const qs = require('qs')
 const validate = require('validate.js')
 
 const constraints = () => ({
@@ -16,7 +16,7 @@ module.exports = () => ({
   state: {
     form: initForm(),
     errors: initErrors(),
-    valid: true
+    valid: false
   },
 
   reducers: {
@@ -37,34 +37,34 @@ module.exports = () => ({
   },
 
   effects: {
-    getToken (state, _, send, done) {
-      const cb = () => {
+    getToken (_state, _, send, done) {
+      const cb = (_data, state) => {
         if (!state.login.valid) {
           return
         }
 
-        const payload = qs.stringify({
+        const payload = {
           grant_type: 'password',
-          username: state.login.form.email,
+          email: state.login.form.email,
           password: state.login.form.password
-        })
+        }
 
-        http.post('http://localhost:8000/api/oauth/token', payload).then(response => {
+        http.post('/oauth/token', payload).then(response => {
           send('auth:store', {
             accessToken: response.data.access_token,
             refreshToken: response.data.refresh_token,
-            expiresIn: response.data.expires_in
+            expiresIn: response.data.expires_id
           }, done)
 
           send('login:reset', null, done)
           send('alert:growl', 'Welcome back!', done)
           send('location:set', '/', done)
         }).catch(err => {
+          console.log(err)
           send('alert:growl', 'Login Failed!', done)
           done(err)
         })
       }
-
       send('login:validate', null, cb)
     }
   }

@@ -9,11 +9,17 @@ module.exports = (state, prev, send) => {
 
   const menuItems = () => [
     menuItem({content: 'Some Item'}),
+    menuItem({content: 'Some Other Item'}),
     menuItem({content: 'Some Other Item', divider: true}),
-    menuItem({content: 'Some Other Item', divider: true}),
-    menuItem({content: 'Some Other Item', divider: true}),
+    menuItem({content: 'Some Other Item'}),
     menuItem({content: 'Some Disabled Item', disabled: true}),
+  ]
 
+  const menu2Items = () => [
+    menuItem({content: 'Some Awesome Item'}),
+    menuItem({content: 'Some Other Item', divider: true}),
+    menuItem({content: 'Some Sweet Item', disabled: true}),
+    menuItem({content: 'An item with a longer body'}),
   ]
 
   return html`
@@ -29,7 +35,7 @@ module.exports = (state, prev, send) => {
       })}
 
       ${dropdown('my-menu-2', {
-        props: {items: menuItems()},
+        props: {items: menu2Items()},
         initialState: { visible: true }
       })}
     </article>

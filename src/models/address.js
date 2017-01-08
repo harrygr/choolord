@@ -1,4 +1,4 @@
-const transport = require('../transport')
+const http = require('../client')
 
 module.exports = () => ({
   namespace: 'address',
@@ -25,7 +25,7 @@ module.exports = () => ({
 
   effects: {
     lookup (state, _, send, done) {
-      transport(state.auth).get(`/postcodes?postcode=${state.address.postcode}`).then(({data}) => {
+      http.get(`/postcodes?postcode=${state.address.postcode}`).then(({data}) => {
         send('address:setResults', data, done)
       }).catch(err => {
         send('alert:growl', 'Address Lookup Failed', done)

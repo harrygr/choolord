@@ -14,7 +14,6 @@ module.exports = () => ({
 
   effects: {
     growl (state, message, send, done) {
-      console.log('We growled with ' + message)
       send('alert:set', message, done)
       setTimeout(() => {
         send('alert:set', '', done)

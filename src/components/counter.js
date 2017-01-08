@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const button = require('./button')
-const {updateInstanceWithId, removeInstanceWithId, getDefaultReducers} = require('./helpers')
+const {update, getDefaultReducers} = require('./component')
 
 const element = ({
   count = 0,
@@ -60,7 +60,7 @@ const model = () => ({
   reducers: {
     ...getDefaultReducers(emptyCounter),
     set (state, { id, count }) {
-      return updateInstanceWithId(state.instances, id, {
+      return update(state.instances, id, {
         ...state.instances[id],
         count
       })
@@ -68,13 +68,13 @@ const model = () => ({
     increment (state, id) {
       const prev = state.instances[id].count
 
-      return updateInstanceWithId(state.instances, id, {
+      return update(state.instances, id, {
         ...state.instances[id],
         count: prev + 1
       })
     },
     setProp(state, { id, key, value }) {
-      return updateInstanceWithId(state.instances, id, {
+      return update(state.instances, id, {
         ...state.instances[id],
         [key]: value
       })
