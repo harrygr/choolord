@@ -7,23 +7,22 @@ module.exports = () => {
 
   return widget({
     render: (coords) => {
+      console.log('render')
       return html`
         <div>
-          <div
-            style="height: 500px"
-            onload=${(el) => initMap(el, coords)}
-            onunload=${removeMap}></div>
+          <div onload=${(el) => initMap(el, coords)} onunload=${removeMap}
+            style="height: 500px"></div>
         </div>
       `
     },
     onupdate: (el, coords) => {
+      console.log('update')
       if (map) map.setView(coords)
     }
   })
 
   function initMap (el, coords) {
-
-    console.log(el)
+    console.log('initMap', el)
     const defaultZoom = 12
     map = leaflet.map(el).setView(coords, defaultZoom)
 
@@ -37,6 +36,7 @@ module.exports = () => {
   }
 
   function removeMap (el) {
+    console.log('remove')
     if (map) {
       map.remove()
       map = null

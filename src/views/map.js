@@ -16,7 +16,6 @@ module.exports = (state, prev, send) => {
   return html`
   <article>
     <h1>${state.map.title}</h1>
-
     <button onclick=${toPhiladelphia}>Philadelphia</button>
     <button onclick=${toSeattle}>Seattle</button>
     ${mapInstance(state.map.coords)}

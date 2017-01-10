@@ -21,8 +21,8 @@ app.router([
   ['/', layout(require('./views/home'))],
   ['/login', middleware.redirectIfAuthenticated(layout(require('./views/login')))],
   ['/profile', middleware.redirectIfUnauthenticated(layout(require('./views/profile')))],
-  ['/widgets', middleware.redirectIfUnauthenticated(layout(require('./views/widgets')))],
-  ['/map', middleware.redirectIfUnauthenticated(layout(require('./views/map')))],
+  ['/widgets', layout(require('./views/widgets'))],
+  ['/map', layout(require('./views/map'))],
   ])
 
 const tree = app.start()

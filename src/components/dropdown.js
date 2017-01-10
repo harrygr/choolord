@@ -58,7 +58,7 @@ const view = ({
   }
   const onunload = (elm) => {
     unListen({ elm })
-    teardown()
+    // teardown()
   }
 
   return html`

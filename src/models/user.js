@@ -25,19 +25,16 @@ module.exports = () => ({
   },
 
   effects: {
-    fetchIfRequired (state, _, send, done) {
-      const cb = (_data, globalState) => {
-        const userId = getUserIdFromToken(globalState.auth.accessToken)
-
+    fetch (state, data, send, done) {
+      try {
+        const userId = getUserIdFromToken(data.accessToken)
         console.log('Fetching user with ID ' + userId)
 
         http.get(`/user/${userId}`).then(({data}) => {
           send('user:set', data, done)
         }).catch(done)
-      }
-
-      if (!state.user.id) {
-        send('user:doSomething', 'foo', cb)
+      } catch (e) {
+        console.log('token didn\'t work')
       }
     },
   }

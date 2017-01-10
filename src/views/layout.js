@@ -5,7 +5,9 @@ const footer = require('./footer')
 const snackbar = require('../components/snackbar')
 
 module.exports = child => (state, prev, send) => {
-  send('user:fetchIfRequired')
+  if (!state.user.user.id && state.auth.accessToken) {
+    send('user:fetch', {accessToken: state.auth.accessToken})
+  }
 
   return html`
   <div id="app" class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
@@ -13,13 +15,17 @@ module.exports = child => (state, prev, send) => {
       ${header(state, prev, send)}
       <main class="mdl-layout__content">
         <div class="page-container">
-          ${pageSection(child(state, prev, send))}
+          <div class="mdl-card mdl-shadow--2dp page-section">
+            <div class="mdl-card__supporting-text" style="overflow: visible;">
+          ${child(state, prev, send)}
+          </div>
+          </div>
         </div>
         ${footer()}
       </main>
     </div>
 
-    ${snackbar(state.alert.message)}
+    <div>${snackbar(state.alert.message)}</div>
   </div>
   `
 }

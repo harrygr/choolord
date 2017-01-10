@@ -25,10 +25,6 @@ module.exports = (state, prev, send) => {
   return html`
     <article>
     <div>
-      ${counter('abcas', {initialState: {count: 5000}})}
-      <br />
-      ${counter('llasdfhdj')}
-
       <br />
 
       ${dropdown('my-menu-2', {
