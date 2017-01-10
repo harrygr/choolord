@@ -1,16 +1,16 @@
 const choo = require('choo')
 const log = require('choo-log')
 
-
+console.log('serving index')
 const app = choo()
 app.use(log())
-app.use({
-  wrapEffects (effect) {
-    return (state, payload, send, done) => {
-      effect(app._store.state(), payload, send, done)
-    }
-  }
-})
+// app.use({
+//   wrapEffects (effect) {
+//     return (state, payload, send, done) => {
+//       effect(app._store.state(), payload, send, done)
+//     }
+//   }
+// })
 
 require('./models').map(app.model)
 
@@ -22,6 +22,7 @@ app.router([
   ['/login', middleware.redirectIfAuthenticated(layout(require('./views/login')))],
   ['/profile', middleware.redirectIfUnauthenticated(layout(require('./views/profile')))],
   ['/widgets', middleware.redirectIfUnauthenticated(layout(require('./views/widgets')))],
+  ['/map', middleware.redirectIfUnauthenticated(layout(require('./views/map')))],
   ])
 
 const tree = app.start()

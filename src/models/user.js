@@ -8,31 +8,38 @@ module.exports = () => ({
   namespace: 'user',
 
   state: {
-    user: blankUser()
+    user: blankUser(),
+    token: null
   },
 
   reducers: {
     set (state, user) {
       return {user}
+    },
+    setToken (state, token) {
+      return {token}
+    },
+    doSomething(state, data) {
+      return state
     }
   },
 
   effects: {
     fetchIfRequired (state, _, send, done) {
-      if (state.auth.accessToken && !state.user.user.id) {
-        send('user:fetch', null, done)
+      const cb = (_data, globalState) => {
+        const userId = getUserIdFromToken(globalState.auth.accessToken)
+
+        console.log('Fetching user with ID ' + userId)
+
+        http.get(`/user/${userId}`).then(({data}) => {
+          send('user:set', data, done)
+        }).catch(done)
+      }
+
+      if (!state.user.id) {
+        send('user:doSomething', 'foo', cb)
       }
     },
-
-    fetch (state, _, send, done) {
-      const userId = getUserIdFromToken(state.auth.accessToken)
-
-      console.log('Fetching user with ID ' + userId)
-
-      http.get(`/user/${userId}`).then(({data}) => {
-        send('user:set', data, done)
-      }).catch(done)
-    }
   }
 })
 

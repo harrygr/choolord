@@ -1,7 +1,7 @@
 const html = require('choo/html')
 const makeCounter = require('../components/counter').component
-const makeDropdown = require('../components/dropdown').component
 const menuItem = require('../components/dropdown-menu--item')
+const makeDropdown = require('../components/dropdown').component
 
 module.exports = (state, prev, send) => {
   const counter = makeCounter(state, prev, send)
@@ -24,20 +24,18 @@ module.exports = (state, prev, send) => {
 
   return html`
     <article>
+    <div>
       ${counter('abcas', {initialState: {count: 5000}})}
       <br />
       ${counter('llasdfhdj')}
 
       <br />
-      ${dropdown('my-menu', {
-        props: {items: menuItems()},
-        initialState: {}
-      })}
 
       ${dropdown('my-menu-2', {
         props: {items: menu2Items()},
         initialState: { visible: true }
       })}
+      </div>
     </article>
   `
 }
